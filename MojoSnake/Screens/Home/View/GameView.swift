@@ -2,20 +2,26 @@ import SwiftUI
 
 struct GameView: View {
     @StateObject private var viewModel = GameViewModel()
-    
+    var interstitial = InterstitialAdView(adUnitId: .interstitialAd)
+    @StateObject private var versionVM = VersionCheckViewModel()
+
     var body: some View {
         VStack {
             HStack {
                 BannerAdView(adUnitId: .homeBanner).clipped()
                 
-            }.frame(maxHeight: 300).padding(.bottom,20)
+            }.frame(maxHeight: 300).padding(.bottom,20)            
             
-            Spacer()
-            Text("Score: \(viewModel.score)")
-                .font(.title2)
-            Text("High Score: \(viewModel.highScore)")
-                .font(.subheadline)
-                .foregroundColor(.gray)
+            VStack {
+                Text("Score: \(viewModel.score)")
+                    .font(.title2)
+                Text("High Score: \(viewModel.highScore)")
+                    .font(.subheadline)
+                    .foregroundColor(.gray)
+            }.frame(maxWidth: .infinity, maxHeight: 100)
+                
+                
+               
             
             ZStack {
                 Rectangle()
@@ -40,6 +46,18 @@ struct GameView: View {
             .frame(width: CGFloat(viewModel.columns) * viewModel.cellSize,
                    height: CGFloat(viewModel.rows) * viewModel.cellSize)
             .background(Color.black.opacity(0.05))
+            .alert("Update Available", isPresented: $versionVM.showUpdateAlert) {
+                            Button("Update") {
+                                if let url = URL(string: versionVM.updateUrl) {
+                                    UIApplication.shared.open(url)
+                                }
+                            }
+                            if !versionVM.forceUpdate {
+                                Button("Later", role: .cancel) {}
+                            }
+                        } message: {
+                            Text("A new version of the app is available.")
+                        }
             .gesture(
                 DragGesture()
                     .onEnded { value in
@@ -58,6 +76,7 @@ struct GameView: View {
             .padding()
             
             if viewModel.isGameOver {
+
                 Button(action: {
                     viewModel.resetGame()
                 }) {
@@ -72,7 +91,14 @@ struct GameView: View {
                 .frame(width: 200) // Optional: set fixed width
                 
                 .padding(.top)
+                .onAppear {
+                    interstitial.showAd()
+
+                }
             }
+        }.onLoad {
+            versionVM.checkForUpdate()
+
         }
         .onAppear {
             viewModel.startGame()

@@ -29,7 +29,7 @@ class GoogleAdManager {
 
         MobileAds.shared.start { status in
             self.loadInterstitialAd(withAdUnitId: AdUnitID.interstitialAd.unitID)
-            self.loadOpenAppAd(withAdUnitId: AdUnitID.appopen.unitID)
+           // self.loadOpenAppAd(withAdUnitId: AdUnitID.appopen.unitID)
         }
     }
     

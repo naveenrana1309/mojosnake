@@ -4,10 +4,10 @@
 <dict>
 	<key>FirebaseAppDelegateProxyEnabled</key>
 	<false/>
-	<key>GADApplicationIdentifier</key>
-	<string>ca-app-pub-6202941020778268~9787834379</string>
 	<key>FirebaseAutomaticScreenReportingEnabled</key>
 	<false/>
+	<key>GADApplicationIdentifier</key>
+	<string>ca-app-pub-6202941020778268~9787834379</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>remote-notification</string>
