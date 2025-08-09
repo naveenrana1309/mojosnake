@@ -79,6 +79,7 @@ struct GameView: View {
 
                 Button(action: {
                     viewModel.resetGame()
+                    AnalyticsManager.shared.logEvent(event: .restart)
                 }) {
                     Text("Restart")
                         .font(.headline)

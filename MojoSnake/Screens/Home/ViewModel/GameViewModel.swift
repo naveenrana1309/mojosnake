@@ -28,6 +28,7 @@ class GameViewModel: ObservableObject {
     private var timer: Timer?
 
     func startGame() {
+        AnalyticsManager.shared.logEvent(event: .gamestart)
         timer?.invalidate()
         timer = Timer.scheduledTimer(withTimeInterval: 0.2, repeats: true) { _ in
             self.updateGame()
@@ -105,6 +106,9 @@ class GameViewModel: ObservableObject {
             if score > highScore {
                 highScore = score
                 UserDefaults.standard.set(highScore, forKey: "HighScore")
+                AnalyticsManager.shared.logEvent(event: .highscore(score: String(highScore)))
+                AnalyticsManager.shared.logEvent(event: .gameover)
+
             }
             return
         }
